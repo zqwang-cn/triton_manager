@@ -26,6 +26,18 @@ def create_model(model):
     with open(os.path.join(model_dir, 'config.pbtxt'), 'w') as f:
         f.write(s)
 
+    for version in model.versions.all():
+        version_dir = os.path.join(model_dir, str(version.version))
+        if not os.path.exists(version_dir):
+            os.mkdir(version_dir)
+        
+        if not version.model_file:
+            continue
+
+        file_path = version.model_file.path
+        if file_path.endswith('.onnx'):
+            os.symlink(file_path, os.path.join(version_dir, 'model.onnx'))
+
 def create():
     msg = remove()
     if msg is not None:

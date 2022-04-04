@@ -26,3 +26,8 @@ class Model(models.Model):
     inputs = models.JSONField()
     outputs = models.JSONField()
     max_batch_size = models.PositiveSmallIntegerField(default=0)
+
+class Version(models.Model):
+    version = models.PositiveSmallIntegerField()
+    model_file = models.FileField(upload_to='model_files/', null=True)
+    model = models.ForeignKey(Model, on_delete=models.CASCADE, related_name='versions')
